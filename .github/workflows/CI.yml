@@ -32,7 +32,7 @@ jobs:
   release:
     name: Build and release
     runs-on: ubuntu-22.04
-    if: "startsWith(github.ref, 'refs/tags/')"
+    if: startsWith(github.ref, 'refs/tags/')
     needs: [check]
     steps:
       - uses: actions/checkout@v3
@@ -50,12 +50,13 @@ jobs:
       - name: Hash binary
         run: |
           sudo apt-get install -y openssl
-          openssl dgst -sha256 -out helloworld.sha256 target/release/helloworld
-          openssl dgst -sha1 -out helloworld.sha1 target/release/helloworld
+          pushd target/release
+          openssl dgst -sha256 -out helloworld.sha256 helloworld
+          openssl dgst -sha1 -out helloworld.sha1 helloworld
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
           files: |
             target/release/helloworld
-            helloworld.sha256
-            helloworld.sha1
+            target/release/helloworld.sha256
+            target/release/helloworld.sha1
