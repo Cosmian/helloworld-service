@@ -1,0 +1,49 @@
+---
+kind: Pod
+apiVersion: v1
+metadata:
+  name: cc-helloworld
+  namespace: default
+  labels:
+    name: trustee
+spec:
+  runtimeClassName: kata-cc-isolation
+  containers:
+    - image: "ghcr.io/cosmian/helloworld-service:0.3.0"
+      name: helloworld-container
+      imagePullPolicy: Always
+      securityContext:
+        privileged: true
+      ports:
+        - containerPort: 8080
+      volumeMounts:
+        - mountPath: /mnt/uds
+          name: storage
+          readOnly: false
+    - image: "ghcr.io/cosmian/az-attestation-container:2.9"
+      name: attestation-container
+      imagePullPolicy: Always
+      securityContext:
+        privileged: true
+      volumeMounts:
+        - mountPath: /mnt/uds
+          name: storage
+          readOnly: false
+  volumes:
+    - name: storage
+      emptyDir: {}
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: cc-helloworld-service
+  namespace: default
+spec:
+  type: LoadBalancer
+  selector:
+    name: trustee
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+      name: http

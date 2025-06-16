@@ -8,6 +8,12 @@ Simple HTTP service in Rust 🦀 with [axum](https://github.com/tokio-rs/axum).
 cargo build --release
 ```
 
+Feature `confidential` allows to add `/report` endpoint for Confidential Containers on AKS:
+
+```console
+cargo build --release --features="confidential"
+```
+
 ## Run
 
 ```console
