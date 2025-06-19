@@ -1,10 +1,16 @@
 [package]
 name = "helloworld"
-version = "0.2.0"
+version = "0.3.0"
 edition = "2021"
 
 [dependencies]
-axum = "0.7"
-tokio = { version = "1.39", features = ["full"] }
+axum = { version = "0.8" }
+az-cca = { git = "https://github.com/Cosmian/az-cca.git", tag = "0.1.0", optional = true}
+base64 = "0.22"
+serde = { version = "1.0", features = ["derive"] }
+tokio = { version = "1.44", features = ["full"] }
 tracing = "0.1"
 tracing-subscriber = "0.3"
+
+[features]
+confidential = ["dep:az-cca"]
