@@ -20,6 +20,9 @@ spec:
         - mountPath: /mnt/uds
           name: storage
           readOnly: false
+        - mountPath: /mnt/azuredisk/data
+          name: persistent-storage
+          readOnly: false
     - image: "ghcr.io/cosmian/az-attestation-container:2.9"
       name: attestation-container
       imagePullPolicy: Always
@@ -32,6 +35,9 @@ spec:
   volumes:
     - name: storage
       emptyDir: {}
+    - name: persistent-storage
+      persistentVolumeClaim:
+        claimName: pvc-cc-managed-csi
 ---
 kind: Service
 apiVersion: v1
@@ -47,3 +53,15 @@ spec:
       port: 8080
       targetPort: 8080
       name: http
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-cc-managed-csi
+spec:
+  accessModes:
+    - ReadWriteOncePod
+  resources:
+    requests:
+      storage: 100Gi
+  storageClassName: cc-managed-csi
