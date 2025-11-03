@@ -47,16 +47,8 @@ jobs:
         with:
           command: build
           args: --release
-      - name: Hash binary
-        run: |
-          sudo apt-get install -y openssl
-          pushd target/release
-          openssl dgst -sha256 -out helloworld.sha256 helloworld
-          openssl dgst -sha1 -out helloworld.sha1 helloworld
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
           files: |
             target/release/helloworld
-            target/release/helloworld.sha256
-            target/release/helloworld.sha1
