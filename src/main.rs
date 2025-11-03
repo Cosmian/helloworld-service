@@ -57,7 +57,7 @@ async fn root() -> &'static str {
 
 #[cfg(feature = "confidential")]
 async fn report(body: Bytes) -> Result<Json<report::Report>, StatusCode> {
-    tracing::debug!("GET /report");
+    tracing::debug!("POST /report");
 
     if body.len() > 64 {
         return Err(StatusCode::UNPROCESSABLE_ENTITY);
